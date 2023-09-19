@@ -5,12 +5,36 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Phaser 3 Lightning Plugin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <style>
+    body, html{
+      background-color: black;
+      width:100%;
+      height:100%;
+      margin: 0 0;
+    }
+    #phaser-example{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top:0px;
+      left:0px;
+      width:100%;
+      height:100%;
+    }
+    #phaser-example canvas{
+
+      width:100%;
+      height:100%;
+    }
+  </style>
 </head>
 
 <body>
 
   <div id="phaser-example"></div>
-  <script src="//cdn.jsdelivr.net/npm/phaser@3.10.1/dist/phaser.js"></script>
+  <script src="./cdn.jsdelivr.net_npm_phaser@3.60.0_dist_phaser.min.js"></script>
+
+
   <script>
     var urlParams = new URLSearchParams(window.location.search);
     var filename = urlParams.get('src');
