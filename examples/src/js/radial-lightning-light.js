@@ -35,6 +35,8 @@ function start() {
 
 function create() {
   console.log("create");
+  this.lightningCountMax = 25;
+  this.lightningGraphicsArray = [];
 
   this.lightningCount = 0;
   this.counter = 0;
@@ -47,48 +49,57 @@ function update(time, delta) {
       this.lightningGenerator = this.lightning.add(Math.random() * 3 + 7);
 
       const lightningGraphics = this.add.graphics({ x: 0, y: 0 });
-      this.lightningCount++;
       createLightning = createLightning.bind(this);
-      console.log("lightningCount = ",this.lightningCount);
-      if (Math.random() < 0.5) {
+      animateLightning = animateLightning.bind(this);
+      console.log("lightningCount = ", this.lightningCount);
+
+      if (this.lightningGraphicsArray.length <= this.lightningCountMax) {
+        var finalPos = {};
         if (Math.random() < 0.5) {
-          //right
-          createLightning(lightningGraphics, {
-            x: width,
-            y: Math.floor(Math.random() * height),
-          });
+          if (Math.random() < 0.5) {
+            //right
+            finalPos = {
+              x: width,
+              y: Math.floor(Math.random() * height),
+            };
+          } else {
+            //down
+            finalPos = {
+              x: Math.floor(Math.random() * width),
+              y: height,
+            };
+          }
         } else {
-          //down
-          createLightning(lightningGraphics, {
-            x: Math.floor(Math.random() * width),
-            y: height,
-          });
+          if (Math.random() < 0.5) {
+            // left
+            finalPos = {
+              x: 0,
+              y: Math.floor(Math.random() * height),
+            };
+          } else {
+            //up
+            finalPos = {
+              x: Math.floor(Math.random() * width),
+              y: 0,
+            };
+          }
         }
+
+        createLightning(lightningGraphics, finalPos);
       } else {
-        if (Math.random() < 0.5) {
-          // left
-          createLightning(lightningGraphics, {
-            x: 0,
-            y: Math.floor(Math.random() * height),
-          });
-        } else {
-          //up
-          createLightning(lightningGraphics, {
-            x: Math.floor(Math.random() * width),
-            y: 0,
-          });
+        animateLightning(this.lightningGraphicsArray[this.lightningCount]);
+        this.lightningCount++;
+        if (this.lightningCount === this.lightningGraphicsArray.length) {
+          this.lightningCount = 0;
         }
       }
-
     }
   }
 }
 
 function createLightning(lightningGraphics, finalPos) {
-
   lightningGraphics.clear();
   const { width, height } = this.sys.game.canvas;
-
 
   lightning = this.lightningGenerator.generate(
     { x: width / 2, y: height / 2 },
@@ -139,8 +150,24 @@ function createLightning(lightningGraphics, finalPos) {
     alpha: 0,
     state: 1,
     ease: Phaser.Math.Easing.Quadratic.Out,
-    onComplete: ()=>{
-      lightningGraphics.destroy();
-    }
+    onComplete: () => {
+      // lightningGraphics.destroy();
+    },
+  });
+
+  this.lightningGraphicsArray.push(lightningGraphics);
+}
+
+function animateLightning(graphics) {
+  graphics.alpha = 1;
+  this.tweens.add({
+    targets: graphics,
+    duration: 400,
+    alpha: 0,
+    state: 1,
+    ease: Phaser.Math.Easing.Quadratic.Out,
+    onComplete: () => {
+      // lightningGraphics.destroy();
+    },
   });
 }

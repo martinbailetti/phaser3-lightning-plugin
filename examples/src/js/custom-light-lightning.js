@@ -36,64 +36,33 @@ function start() {
 function create() {
   console.log("create");
 
-  this.lightningCount = 0;
   this.counter = 0;
 }
 function update(time, delta) {
   if (window.play) {
-    if (time - this.counter > 10) {
+    if (time - this.counter > 100) {
       const { width, height } = this.sys.game.canvas;
       this.counter = time;
-      this.lightningGenerator = this.lightning.add(Math.random() * 3 + 7);
+      this.lightningGenerator = this.lightning.add(Math.random() * 3 + 9);
 
-      const lightningGraphics = this.add.graphics({ x: 0, y: 0 });
-      this.lightningCount++;
+      const lightningGraphics = this.add.graphics({ x: 30, y: 30 });
+
       createLightning = createLightning.bind(this);
-      console.log("lightningCount = ",this.lightningCount);
-      if (Math.random() < 0.5) {
-        if (Math.random() < 0.5) {
-          //right
-          createLightning(lightningGraphics, {
-            x: width,
-            y: Math.floor(Math.random() * height),
-          });
-        } else {
-          //down
-          createLightning(lightningGraphics, {
-            x: Math.floor(Math.random() * width),
-            y: height,
-          });
-        }
-      } else {
-        if (Math.random() < 0.5) {
-          // left
-          createLightning(lightningGraphics, {
-            x: 0,
-            y: Math.floor(Math.random() * height),
-          });
-        } else {
-          //up
-          createLightning(lightningGraphics, {
-            x: Math.floor(Math.random() * width),
-            y: 0,
-          });
-        }
-      }
 
+        createLightning(lightningGraphics, {
+          x: Math.floor(Math.random() * width/2)+width/2,
+          y: Math.floor(Math.random() * height/2)+height/2,
+        });
+ 
     }
   }
 }
 
 function createLightning(lightningGraphics, finalPos) {
-
+  // console.log("createLightning");
   lightningGraphics.clear();
-  const { width, height } = this.sys.game.canvas;
 
-
-  lightning = this.lightningGenerator.generate(
-    { x: width / 2, y: height / 2 },
-    finalPos
-  );
+  const lightning = this.lightningGenerator.generate({ x: 0, y: 0 }, finalPos);
 
   const lineSize = 3;
   const color = 0xdedeff;
@@ -114,8 +83,8 @@ function createLightning(lightningGraphics, finalPos) {
     lightningGraphics.strokePath();
   });
 
-  const lineSize2 = 1;
-  const color2 = 0x0000ff;
+   const lineSize2 = 1;
+  const color2 = 0x0000AA;
   lightning.forEach((s) => {
     if (s.level === 1) {
       lightningGraphics.lineStyle(lineSize2, color2, 0.7);
@@ -131,7 +100,7 @@ function createLightning(lightningGraphics, finalPos) {
     lightningGraphics.lineTo(s.endPoint.x, s.endPoint.y);
     lightningGraphics.closePath();
     lightningGraphics.strokePath();
-  });
+  }); 
 
   let tween = this.tweens.add({
     targets: lightningGraphics,
